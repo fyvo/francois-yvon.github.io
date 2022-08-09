@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/stylesheet/style.min.css">
+
+    <link id="dark-theme-style" rel="stylesheet" type="text/css"
+          media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+    href="https://fyvo.github.io/theme/stylesheet/dark-theme.min.css">
+
+    <link id="pygments-dark-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: light)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+
+
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/solid.css">
+
+
+    <link href="https://fyvo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Multilingual NLP / Multilinguisme en Traitement des langues Atom">
+
+
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#222222">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#222222">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#222222">
+
+<meta name="author" content="François Yvon" />
+<meta name="description" content="Reviewing takes a lot time I review a lot. If review for conferences, workshops, journals. I am also AE for TACL, ACM Computing Surveys, Computer Speech and Language and Traitement Automatique des Langues (mostly in French). Which means that I review too much. Hopefully my employer (CNRS) does not seem …" />
+<meta name="keywords" content="reviewing, ACL">
+
+
+<meta property="og:site_name" content="Multilingual NLP / Multilinguisme en Traitement des langues"/>
+<meta property="og:title" content="Peer reviewing (in Comp Ling) - Why it is broken and ways to fix it"/>
+<meta property="og:description" content="Reviewing takes a lot time I review a lot. If review for conferences, workshops, journals. I am also AE for TACL, ACM Computing Surveys, Computer Speech and Language and Traitement Automatique des Langues (mostly in French). Which means that I review too much. Hopefully my employer (CNRS) does not seem …"/>
+<meta property="og:locale" content="fr_FR"/>
+<meta property="og:url" content="https://fyvo.github.io/posts/2020/sep/30/peer-reviewing-in-comp-ling-why-it-is-broken-and-ways-to-fix-it-en.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2020-09-30 00:00:00+02:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://fyvo.github.io/">
+<meta property="article:section" content="reviewing"/>
+<meta property="article:tag" content="reviewing"/>
+<meta property="article:tag" content="ACL"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>Multilingual NLP / Multilinguisme en Traitement des langues &ndash; Peer reviewing (in Comp Ling) - Why it is broken and ways to fix it</title>
+
+</head>
+<body >
+  <aside>
+    <div>
+      <a href="https://fyvo.github.io">
+        <img src="/images/profile.png" alt="" title="">
+      </a>
+
+      <h1>
+        <a href="https://fyvo.github.io"></a>
+      </h1>
+
+<p>Un site académique / An academic site</p>
+
+      <nav>
+        <ul class="list">
+
+
+
+            <li>
+              <a target="_self" href="/pages/curriculum" >About me</a>
+            </li>
+            <li>
+              <a target="_self" href="https://cv.archives-ouvertes.fr/francois-yvon" >Publications</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/reviewing-and-editing-activities-en" >Reviewing</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/blog_index.html" >Posts</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/contacts-en,fr" >Contact</a>
+            </li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-LinkedIn" href="https://www.linkedin.com/in/françois-yvon-b5b64a" target="_blank">
+              <i class="fab fa-LinkedIn"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Twitter" href="https://twitter.com/yvofr" target="_blank">
+              <i class="fab fa-Twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Github" href="https://github.com/fyvo" target="_blank">
+              <i class="fab fa-Github"></i>
+            </a>
+          </li>
+      </ul>
+    </div>
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://fyvo.github.io">Home</a>
+
+      <a href="/pages/resources-for-machine-translation-en">Resources [en]</a>
+      <a href="/pages/enseignements">Enseignement [fr]</a>
+      <a href="/pages/doctorants">Doctorants [fr]</a>
+      <a href="/pages/mediation-scientifique">Médiation [fr]</a>
+
+      <a href="https://fyvo.github.io/feeds/all.atom.xml">Atom</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="peer-reviewing-in-comp-ling-why-it-is-broken-and-ways-to-fix-it">Peer reviewing (in Comp Ling) - Why it is broken and ways to fix it</h1>
+    <p>
+      Posted on Mer, 30 sep 2020 in <a href="https://fyvo.github.io/category/reviewing.html">reviewing</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <h2>Reviewing  takes a lot time</h2>
+<p>I review a lot. If review for conferences, workshops, journals. I am also AE for <a href="http://transacl.org">TACL</a>, <a href="http://dl.acm.org/journals/csur">ACM Computing Surveys</a>, <a href="">Computer Speech and Language</a> and <a href="http://www.atala.org/revuetal">Traitement Automatique des Langues</a> (mostly in French). Which means that I review too much. Hopefully my employer (<a href="http://www.cnrs.fr">CNRS</a>) does not seem to mind. Yet. The situation is getting worse every year, to the point where I can feel<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> -- as many -- that our model is broken. This point was already raised years ago in our community notably by <a href="CL31-4">K. Church (2005)</a> and <a href="CL37-1">I. Mani, (2011)</a>, as in others. A very long thorough analysis of the issue, and proposals to improve our current practicies is in <a href="https://arxiv.org/pdf/2010.03863.pdf">A. Rogers and I. Augenstein (2020)</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, following a series of <a href="https://hackingsemantics.xyz/">Blog posts</a> by the first author. These proposals are mostly intended at maintaining fairness and accountability of the peer review procedure despite the increase of submissions, and I share many of them.[\R&amp;A] My view point is a bit different, though, since I am primarily interested in ways to spare reviewer's time - since at it seems, the most critical resource in the system.</p>
+<p>We review more because there are more scholars and venues and papers, and our field is growing and being more active, and diverse. This is probably a good thing. More scholars could imply more reviewers, so the situation may not be that bad.[^2] Still.</p>
+<p>Another reason why there are more reviews is because there a a growing pressure on scholars to increase publication statistics :to get a enroll in a good PhD, to get a position, to get tenured, to be promoted. </p>
+<p>As my field (Computational Linguistics / Natural Language Processing &gt; Machine Learning &gt; IA) is a very active, there is also a pressure to be the first to [add stuff here], so papers need to have to be published quickly and getting reviews is now part of the writing process. Which could be considered as a good thing as well, reviews can help strengthen papers. </p>
+<p>So for a writer, there is no reason why not send a paper to review: if reviews are good, the paper will be published with the "peer-reviewed" stamp, if they are bad, they can help make the paper better. If this the paper is not good enough for the current deadline, it might work for the next. All this for free. </p>
+<p>For a reviewer, all this combines to make things worse -- more papers to read and reviews to write. All this for free, and most of the time noone will ever know. So one of my reaction as been to cut down on the number of reviews, and stop reviewing (and submitting) papers outside the the core NLP community (no more NIPS, ICML, ICLR, AAAI, IJCAI, etc) for me, even though these conferences also publish a significant lot of NLP related papers.</p>
+<p>For the field as a whole, this has a clear downside: even with more slots and venues, more papers compete for the good spots, which means that: (a) people have less time to review, and the quality of reviews drops (may be also as a conjunction of side effects such as the direct or indirect implication of more junior researchers in the process) (b) paper acceptance is increasingly random and very much depends upon the set of reviewers; (c) good papers get rejected; (d) bad papers can be reviewed multiple times, and waste reviewer time (a); (e) with more "core papers" to review, there is less time to accept reviewing from other, related, fields (applied linguistics, ML, image) - maybe.</p>
+<h2>Why review ?</h2>
+<ol>
+<li>
+<p>Because this is how our field, and more generally how science, works. Ideas, experiments, claims, results, proofs need to be reviewed, verified, criticized and discussed before they can slowly be turn into facts and knowledge. Ideally, we should even aim at full reproducibility. Reviewing is part of our job.</p>
+</li>
+<li>
+<p>Because this is good for our CV. Being a reviewer, a workshop / area chair, an editor, is good for the CV. It shows recognition and expertise. With more reviews to write, this might not be a very distinctive feature of our resumes. Nonetheless.</p>
+</li>
+<li>
+<p>Because we can learn from others. Reviewing helps keeping in sync with new ideas in the field. So does following <a href="http://arxiv.org">arxiv</a>, sure, but reviewing, in addition, requires to actually read, rather than skim, the papers (well, that is the theory).</p>
+</li>
+</ol>
+<p>In any case writing a long, detailled, well-argued review, remains a pure act of altruism. What you write will not stay; almost noone will read it, and (almost) noone will know about your work. Why bother? Writing bad reviews is so much better. You still improve your CV, at a reduced cost. And (almost) noone will know.</p>
+<h2>The ACL discussion and proposals</h2>
+<p>ACL has opened the discussion regarding a series of short term, as well as long term, proposals to reform the reviewing and publication process. The discussion page is still open. Use it.</p>
+<p>They start their discussion with four problems with the current system, three that I share (see below), and one that I do not. I will start with this one.</p>
+<p>Turnaround time. Quoting the ACL Exec: "A large factor in the incentive to go to arXiv is that turnaround time from when a paper is finished to when it can be made public can be many months, especially when you get several random rejects." So one first comment is that this time issue is related to the first problem identified by the ACL Exec (arxiv and non-blind reviews). If we fix this one (and we can, by having an ACL operated blind archive, a proposal that is starting to gain momentum), may be the turnaround issue will not be that bad. There are multiple deadlines around the year and multiple venues to publish good papers. Most conferences of our field are called "archival" for a reason - the papers they archive are meant to remain relevant for a long time. For papers that cannot wait the extra-month before being released, because they risk to lose their value, <a href="http://arxiv.org">arxiv</a> is an excellent choice, but please do not expect a good (and free) peer review. This is in fact my take on ACL Exec's first proposal: a ban on pre-publishing on arxiv - as this breaks blind review. So sad news: good peer review is somehow antoganistic to fast turnaround -- even if we can make our best effort, as <a href="https://transacl.org/ojs/index.php/tacl/about/editorialPolicies#peerReviewProcess">TACL</a> has, to reduce the total duration of the reviewing process.</p>
+<p>A possible answer to this might be the launching of <a href="https://2020.emnlp.org/blog/2020-04-19-findings-of-emnlp">a new publication vehicule</a> 'Findings of EMNLP' for borderline papers which are in a hurry to be published on a peer-reviewed support. The future will tell whether this initiative will help reduce the number of unpublished papers on arxiv (which is not a concern), as well as the number of resubmitted papers (which is a concern). There are <a href="https://2020.emnlp.org/blog/2020-07-30-findings-acl-response">good reasons</a> to support this initiative. <a href="https://arxiv.org/pdf/2010.03863.pdf">A. Rogers and I. Augenstein (2020)</a> give (ironically, in a 'Findings' paper) compelling reasons why the exact contrary could well happen.</p>
+<h2>Comments</h2>
+<h3>Reduce the number of paper to review: draining down the pipe</h3>
+<p>Ask each author to explicitely endorse their paper(s). It is not rare to see some authors having their name on dozens of papers submitted at a given conference. When reviews are random, this is the most rational course of action: submitting more papers will maximize the expectation of the number of publications. How many papers can one actually author over a short time frame? That number may vary from indivudals to individuals and from teams to teams. There is however a definition of what authoring a paper means. A simple nudge would be to ask each author to read this short text and validate its status as an author. In fact, <a href="https://transacl.org/ojs/index.php/tacl/about/editorialPolicies#custom-0">our ethical guidelines</a> focus much more on editors and reviewers than on authors. This is an easy fix.</p>
+<p>Desk reject more papers. Style and presentation issues are a problem. They make papers more difficult to read - and pose reviewers an additional burden: to report typos, style errors etc. A first step would be to have a decent English style checker included in the submission pipeline, with a public bar for automatic rejection. Mentoring could be proposed more systematically to assist paper writing (until the time when everyone can write in her own language). Given than we have already solved Machine Translation and Natural Language Understanding[^3], this seems doable. Likewise for plagiarism and incremental publications. Good journals have such tools. We should as well.</p>
+<p>Better control republication. This is a <a href="http://www.transacl.org">TACL policy</a>. Poor papers cannot be resubmitted before a period of time - taken to be long enough for the authors to make the necessary adjustments.</p>
+<p>Distribute fixed submission tokens. This amounts to granting authors a limit of the number of papers they can have reviewed each year. As for the previous proposal on republication, this poses boundaries issues that would be hard to fix given the growing "fluidity" between conferences (LREC - Interspeech ICASSP - ACL - ECAI, IJCAI, AAAI - IMCL, NIPS, AIStats, ICLR, etc.)</p>
+<p>Give more tokens if you review more papers, or if you publish more papers. Likely to create a rich-get-richer effect (in the best case) or a black market of reviewing tokens (in the worst), and yield many discussions about implementation details (how many tokens for team work ? One per author ? Just one to be split among authors ? just the first ? Just the last ?  Just one random author ?). Having one central repository, as proposed by the ACL Exec will enable to compute interesting statistics (max / mean number of submission and review per year and per scholar or institution etc).</p>
+<h3>Improve the reviewing quality (work on the offer side)</h3>
+<p>Incentivize good reviews. This is a proposal of the ACL review committee which recommand to recognize good reviews and reviewers and grant awards <a href="https://www.aclweb.org/adminwiki/index.php?title=Short-Term_Reform_Proposals_for_ACL_Reviewing">Short-term action number 3</a>. Which will imply that someone will have to review the reviews -- arguably AC / AEs read review and can evaluate them; but to compare them on fair grounds and distribute valuable rewards will require to build a more robust sytem. Do we have time for this? Conversely, one could think of many ways to also discourage bad rewiews (a prize for the worst reviewer(s), a publication of the worst reviews (with authors names or institution names), etc, etc?). Probably not the road to follow.</p>
+<p>Train reviewers. This is also an important ACL proposal <a href="https://www.aclweb.org/adminwiki/index.php?title=Short-Term_Reform_Proposals_for_ACL_Reviewing">Short-term action number 4</a>. Learning to review should be part of any good PhD training program, and a lot of material has already been published, as pointed out in <a href="https://2020.emnlp.org/blog/2020-05-17-write-good-reviews">this EMNLP 2020 Blog post</a> or [editors]. Having reviews endorsed by senior staff members could also be a good thing. As long as the right person gets credit for the review. Only selecting reviewers that have been duely trained and prepared for this should be a basic rule of Program Committee building. Should one go one step further and enforce formal requirements (ie. to have a completed PhD degree) ?</p>
+<p>Make reviews public. <a href="https://papers.nips.cc/book/">NeurIPS</a> (as of 2013) and <a href="https://iclr.cc/">ICLR</a> make their anonymous reviews (as well as author's rebuttal) public forever and I tend to think that this tends to improve reviews (could we test this?). If additionnally reviews are signed, this should nudge reviewers towards paying more attention to what they write, which will last, have more readers, more impact, and may help make new friends (or enemies). Non-blind reviewing systems have other biases that are well documented, so the cure might again be worst than the disease.</p>
+<h2>Political grunts</h2>
+<p>About paid reviews: https://www.the-scientist.com/careers/scientists-publishers-debate-paychecks-for-peer-reviewers-68101?mc_cid=540aef3aa7&amp;mc_eid=b30567b349</p>
+<hr>
+<p>[] Excerpt from the <a href="https://www.jsps.go.jp/english/e-kousei/data/singapore_statement_EN.pdf">Singapore statement on research integrity</a>:</p>
+<ol>
+<li>
+<p>'''Authorship''': Researchers should take responsibility for their contributions to all publications, funding applications, reports and other representations of their research. Lists of authors should include all those and only those who meet applicable authorship criteria.</p>
+</li>
+<li>
+<p>'''Publication Acknowledgement''': Researchers should acknowledge in publications the names and roles of those who made significant contributions to the research, including writers, funders, sponsors, and others, but do not meet authorship criteria</p>
+</li>
+</ol>
+<p>[R&amp;A] There are many points worth discussing in this paper. One statement that I find very disturbing is about the indisputable randomness of reject/accept decisions, which the authors attribute to alledged the power law distribution of quality. I disagree - for reasons developed in [this associated post].</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:1">
+<p>EMNLP this year required that for each submitted paper, at least one author had to be a registered candidate reviewer. Suggesting that there was some unbalance between the number of authors and reviewers.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://fyvo.github.io/tag/reviewing.html">reviewing</a>
+      <a href="https://fyvo.github.io/tag/acl.html">ACL</a>
+    </p>
+  </div>
+
+
+
+
+
+</article>
+
+    <footer>
+<p>
+  &copy; 2020 FY - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+  <span class="footer-separator">|</span>
+  Switch to the <a href="javascript:void(0)" onclick="theme.switch(`dark`)">dark</a> | <a href="javascript:void(0)" onclick="theme.switch(`light`)">light</a> | <a href="javascript:void(0)" onclick="theme.switch(`browser`)">browser</a> theme
+  <script id="dark-theme-script"
+          src="https://fyvo.github.io/theme/dark-theme/dark-theme.min.js"
+          data-enable-auto-detect-theme="True"
+          data-default-theme="dark"
+          type="text/javascript">
+  </script>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Multilingual NLP / Multilinguisme en Traitement des langues ",
+  "url" : "https://fyvo.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/stylesheet/style.min.css">
+
+    <link id="dark-theme-style" rel="stylesheet" type="text/css"
+          media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+    href="https://fyvo.github.io/theme/stylesheet/dark-theme.min.css">
+
+    <link id="pygments-dark-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: light)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+
+
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/solid.css">
+
+
+    <link href="https://fyvo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Multilingual NLP / Multilinguisme en Traitement des langues Atom">
+
+
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#222222">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#222222">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#222222">
+
+<meta name="author" content="François Yvon" />
+<meta name="description" content="Une perplexité qui laisse perplexe Les modèles de langue continuent de faire l&#39;objet de nombreuses recherches, en particulier parce que les données d&#39;apprentissage sont abondantes, et permettent de pré-entrainer des représentations ou des réseaux qu&#39;il est possible ensuite de détourner à d&#39;autres fin, presque sans supervision. Le travail récent de …" />
+<meta name="keywords" content="">
+
+
+<meta property="og:site_name" content="Multilingual NLP / Multilinguisme en Traitement des langues"/>
+<meta property="og:title" content="Note sur le calcul de la perplexité"/>
+<meta property="og:description" content="Une perplexité qui laisse perplexe Les modèles de langue continuent de faire l&#39;objet de nombreuses recherches, en particulier parce que les données d&#39;apprentissage sont abondantes, et permettent de pré-entrainer des représentations ou des réseaux qu&#39;il est possible ensuite de détourner à d&#39;autres fin, presque sans supervision. Le travail récent de …"/>
+<meta property="og:locale" content="fr_FR"/>
+<meta property="og:url" content="https://fyvo.github.io/posts/2020/jan/01/note-sur-le-calcul-de-la-perplexite.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2020-01-01 00:00:00+01:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://fyvo.github.io/">
+<meta property="article:section" content="NLP, Language Models, TAL, Modèles de Langue"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>Multilingual NLP / Multilinguisme en Traitement des langues &ndash; Note sur le calcul de la perplexité</title>
+
+</head>
+<body >
+  <aside>
+    <div>
+      <a href="https://fyvo.github.io">
+        <img src="/images/profile.png" alt="" title="">
+      </a>
+
+      <h1>
+        <a href="https://fyvo.github.io"></a>
+      </h1>
+
+<p>Un site académique / An academic site</p>
+
+      <nav>
+        <ul class="list">
+
+
+
+            <li>
+              <a target="_self" href="/pages/curriculum" >About me</a>
+            </li>
+            <li>
+              <a target="_self" href="https://cv.archives-ouvertes.fr/francois-yvon" >Publications</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/reviewing-and-editing-activities-en" >Reviewing</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/blog_index.html" >Posts</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/contacts-en,fr" >Contact</a>
+            </li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-LinkedIn" href="https://www.linkedin.com/in/françois-yvon-b5b64a" target="_blank">
+              <i class="fab fa-LinkedIn"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Twitter" href="https://twitter.com/yvofr" target="_blank">
+              <i class="fab fa-Twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Github" href="https://github.com/fyvo" target="_blank">
+              <i class="fab fa-Github"></i>
+            </a>
+          </li>
+      </ul>
+    </div>
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://fyvo.github.io">Home</a>
+
+      <a href="/pages/resources-for-machine-translation-en">Resources [en]</a>
+      <a href="/pages/enseignements">Enseignement [fr]</a>
+      <a href="/pages/doctorants">Doctorants [fr]</a>
+      <a href="/pages/mediation-scientifique">Médiation [fr]</a>
+
+      <a href="https://fyvo.github.io/feeds/all.atom.xml">Atom</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="note-sur-le-calcul-de-la-perplexite">Note sur le calcul de la perplexité</h1>
+    <p>
+      Posted on Mer 01 jan 2020 in <a href="https://fyvo.github.io/category/nlp-language-models-tal-modeles-de-langue.html">NLP, Language Models, TAL, Modèles de Langue</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <h1>Une perplexité qui laisse perplexe</h1>
+<p>Les modèles de langue continuent de faire l'objet de nombreuses recherches, en particulier parce que les données d'apprentissage sont abondantes, et permettent de pré-entrainer des représentations ou des réseaux qu'il est possible ensuite de détourner à d'autres fin, presque sans supervision. Le <a href="https://s3-us-west-2. amazonaws. com/openai-assets/research-covers/languageunsupervised/language understanding paper.pdf">travail récent de Radford et collègues</a> en donne une très belle illustration, puisque leur modèle de langue est utilisé (une fois adapté à ces tâches) aussi bien pour la classification de documents que pour le calcul d'équivalences sémantiques. Ce travail est encore étendu dans une nouvelle publication, qui exploite une architecture bien plus profonde, et un bien plus grand nombre de données d'apprentissage. Dans ce dernier travail, les auteurs présentent des performances de leur modèle en termes de perplexité, présentant des résultats qui surpassent de loin l'état de l'art. Ainsi ils obtiennent sur le PennTreeBank [] (table 3) un score de 35.76, alors que le très sérieux travail de Melis et co-auteurs [ ], en 2017, compare une dizaine de modèles de l'état de l'art, avec des scores (Table 1) s'échelonnant entre 86.2 et 58.3, des résultats qui sont encore améliorés par Yang et co-auteurs en 2018 [] pour atteindre 47.7 (Il est possible de faire encore un peu mieux - avec une technique qui utilise des réseaux adversariaux pour améliorer les représentations de mots rares []). </p>
+<p>Note: le travail de [[]] se concentre sur le Giga word et ne produit pas de résultat sur le PTB. En revanche, il utilise des modèles de caractères sur la couche de sortie qui semblent capables de scorer n'importe quelle suite de caractère, c-à-d qu'au lieu de calculer directement <span class="math">\(P(w=x_1\dots x_n|h)\)</span> il utilise <span class="math">\(P(x_1|h)p5x_2|x_1,h)\dots P(eow|x_1\dotsx_t,h)\)</span>. Quel est l'effet sur le facteur de normalisation ? Ce serait à regarder de près.</p>
+<h1>Qu'est ce que la perplexité ?</h1>
+<p>La perplexité est une mesure de la capacité de prédiction du modèle de langue <span class="math">\(M\)</span>, proposée dès les travaux pionniers de Shannon sur les modèles de Markov [@Shannon51prediction]. Elle est le plus souvent définie en relation avec l'entropie croisée de la source <span class="math">\(H(M) = E_{x_1 \dots X_T \sim S} \log P(x_1 \dots X_T) = \frac{1}{T} \log P_M(x_t | x_{&lt;t})\)</span> par <span class="math">\(PP(M) = 2^H(M)\)</span>, qui présuppose un modèle capable d'assigner une probabilité à toute séquence de mots, typiquement en la décomposant en utilisant la règle de factorisation de la loi jointe comme un produit de lois conditionnelles. Dans les modèles discrets (n-gramme) [], chaque facteur définit une distribution discrète sur un vocabulaire prédéfini, de taille connue <span class="math">\(|V|\)</span>.</p>
+<p>Une autre manière de trouver ce résultat est d'imaginer un jeu dans lequel il on demande de deviner des mots absents d'un texte en formulant des hypothèses sous la forme d'une distribution de probabilité sur le vocabulaire de sortie. Si le pari correspond à la distribution de probabilité conditionnelle au contexte gauche, on retrouve la forme précédente lorsque l'on prédit successivement les mots de gauche à droite. L'intérêt du jeu de Shannon c'est qu'il autorise à utiliser d'autres modèles (par exemple: qui utilisent le contexte droit, ou bien simultanément le contexte droit et gauche).</p>
+<p>Un des points d'attention dans ces calculs est la taille du vocabulaire. Il est d'une part important de pouvoir produire toutes les séquences possibles, ce qui peut être fait de deux manières:
+- en modélisant l'occurrence d'un mot hors vocabulaire, considéré comme un token supplémentaire ajouté au vocabulaire prédéfini. Si un mot nouveau est rencontré dans le corpus de test, on le remplace par ce token unique (OOV). NB. cela assigne souvent une probabililité trop forte aux mots hors vocabulaires, puisque si chacun est individuellement rare, ils sont collectivement fréquents
+- en utilisant des modèles infra-lexicaux, à base de caractères ou d'autres unités sous-lexicales. Les distributions conditionnelles utilisées pour la prédiction placent des paris sur tous les mots possibles.
+- fait encore autre chose: puisqu'il ne fait pas les prédictions mot à mot, mais ignore même les découpages en mot.</p>
+<p>Il est raisonnable de comparer deux modèles qui choissent l'option (1), à supposer qu'ils aient la même taille de vocabulaire; et sans doute aussi deux modèles qui choisissent l'option (2), mais par contre il n'est pas raisonable de comparer deux modèles qui ne probabilisent pas le même espace.</p>
+<h2>Aux origines de la perplexité</h2>
+<p>L'origine de la perplexité provient de résultats de la théorie de l'information. Un premier concept utile est celui du taux d'entropie d'une suite de VA <span class="math">\(X_{1} \dots X_n\)</span> définie par [@Cover91information,chap4]:
+</p>
+<div class="math">$$
+H(P) = - \frac{1}{n} \sum_{x_1 \dots x_n} P(x_1 \dots x_n) \log P(x_1 \dots x_n)
+$$</div>
+<p>
+L'entropie est alors la limite pour <span class="math">\(n\rightarrow{}\infty\)</span> de <span class="math">\( H(P) $. Sous certaines conditions (stationarité et ergodicité du processus $P\)</span> qui génère les messages), on peut montrer que (a) cette limite existe ; (b), qu'elle est aussi égale à la limite de <span class="math">\(\frac{1}{n} H(X_n|X_1 \dots X_{n-1})\)</span> et que l'on peut calculer <span class="math">\(H(P)\)</span> en mesurant <span class="math">\(\lim_{n \rightarrow \infty} \frac{1}{n} \log P(x_1 \x_n)\)</span>. </p>
+<p>L'idée de perplexité provient de la mesure de la divergence KL entre la distribution "naturelle" des textes anglais et la distribution approchée par un modèle <span class="math">\(M\)</span>. Comme précédemment, la généralisation à des messages des de la divergence conduit à définir:
+</p>
+<div class="math">$$
+KL(P||P_M) = lim_{n \rightarrow \infty}  \sum_{x_1 \dots x_n} p(x_1 \dots x_n) \\frac{log P(x_1 \dots x_n)}{P_M(x_1 \dots x_n)}
+$$</div>
+<p> 
+qui fait apparaitre deux termes: le premier est l'entropie, le second <em>l'entropie croisée</em>. Comme pour la perplexité, ce terme est calculé comme <span class="math">\(\lim_{n \rightarrow \infty} \frac{1}{n} \log P_M(x_1 \x_n)\)</span> quand <span class="math">\((x_1 \dots x_n)\)</span> est une séquence tirée sous <span class="math">\(P\)</span>.</p>
+<h1>Une mise au point éclairante (en anglais)</h1>
+<p>[http://sjmielke.com/comparing-perplexities.htm]
+(même si je ne suis pas complètement d'accord sur l'utilisation de LMs fermés, puisque dans la pratique on utilise un token unk).</p>
+<h1>Une comparaison cross-lingue qui contourne cet obstacle</h1>
+<p>@inproceedings{cotterell-etal-2018-languages,
+    Abstract = {For general modeling methods applied to diverse languages, a natural question is: how well should we expect our models to work on languages with differing typological profiles? In this work, we develop an evaluation framework for fair cross-linguistic comparison of language models, using translated text so that all models are asked to predict approximately the same information. We then conduct a study on 21 languages, demonstrating that in some languages, the textual expression of the information is harder to predict with both n-gram and LSTM language models. We show complex inflectional morphology to be a cause of performance differences among languages.},
+    Address = {New Orleans, Louisiana},
+    Author = {Cotterell, Ryan and Mielke, Sebastian J. and Eisner, Jason and Roark, Brian},
+    Booktitle = {Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 2 (Short Papers)},
+    Date-Added = {2019-04-25 12:31:09 +0200},
+    Date-Modified = {2019-04-25 12:31:09 +0200},
+    Doi = {10.18653/v1/N18-2085},
+    Month = jun,
+    Pages = {536--541},
+    Publisher = {Association for Computational Linguistics},
+    Title = {Are All Languages Equally Hard to Language-Model?},
+    Url = {https://www.aclweb.org/anthology/N18-2085},
+    Year = {2018},
+    Bdsk-Url-1 = {https://www.aclweb.org/anthology/N18-2085},
+    Bdsk-Url-2 = {https://doi.org/10.18653/v1/N18-2085}}</p>
+<h1>References</h1>
+<hr>
+<p><code>
+@articlet{shannon51prediction,
+author={Claude Shannon},
+title={Prediction and entropy of printed English},
+journal={Bell System Technical Journal},
+volume={30},
+pages={50--64},
+year={1951}
+}</p>
+<p>@incollection{Gong18Frage,
+title = {{FRAGE}: Frequency-Agnostic Word Representation},
+author = {Gong, Chengyue and He, Di and Tan, Xu and Qin, Tao and Wang, Liwei and Liu, Tie-Yan},
+booktitle = {Advances in Neural Information Processing Systems 31},
+editor = {S. Bengio and H. Wallach and H. Larochelle and K. Grauman and N. Cesa-Bianchi and R. Garnett},
+pages = {1334--1345},
+year = {2018},
+publisher = {Curran Associates, Inc.},
+url = {http://papers.nips.cc/paper/7408-frage-frequency-agnostic-word-representation.pdf}
+}</p>
+<p>@inproceedings{Hill16goldilocks,
+  booktitle={International Conference on Learning Representations},
+  year={2016},
+  address = {San Juan, Puerto Rico},
+  title={The Goldilocks principle: reading children’s books with explicit memory representations},
+  author={Hill, Felix and Bordes, Antoine and Chopra, Sumit and Weston, Jason}
+}</p>
+<p>@inproceedings{Yang2018breaking,
+title={Breaking the Softmax Bottleneck: A High-Rank {RNN} Language Model},
+author={Zhilin Yang and Zihang Dai and Ruslan Salakhutdinov and William W. Cohen},
+booktitle={International Conference on Learning Representations},
+year={2018},
+url={https://openreview.net/forum?id=HkwZSG-CZ},
+}</p>
+<p>Sutskever, Ilya, Martens, James, and Hinton, Geoffrey E. Generating text with recurrent neural networks.  InPro-ceedings  of  the  28th  International  Conference  on  Ma-chine Learning (ICML-11), pp. 1017–1024, 2011.</p>
+<p>Shannon, Claude E. (July–October 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (3): 379–423. doi:10.1002/j.1538-7305.1948.tb01338.x. hdl:11858/00-001M-0000-002C-4314-2. https://api.istex.fr/document/6F3E3446B6CD867B5803C1548A4F56D3B021A448/fulltext/pdf?sid=istex-browser-addon</p>
+<p></code></p>
+<h1><a href="https://github.com/kpu/kenlm/issues/67">From KenLM discussion forum</a></h1>
+<p>If you want to compare perplexities across different vocabularies, pick a big number (larger than the union of all vocabularies you are considering), and use
+<code>--vocab_pad BIG_NUMBER</code>
+with <code>lmplz</code> when you train the model. This will train a model which is normalized with respect to the vocabulary size you specify.</p>
+<p>The default normalizes with respect to whatever vocabulary exists, plus 1 for the unknown word.</p>
+<p>Remember to do the same with whatever you compare to: if you train a neural network on a 200,000-word vocabulary, then its vocabulary is normalized with respect to 200,000 words including unknown. You should therefore take its unknown word probability times 1/(BIG_NUMBER-200,000) before computing perplexity. Effectively, the unknown probability is the probability of the class, not a specific unknown. So you need to hypothesize a uniform distribution. This is what <code>--vocab_pad</code> does.</p>
+<p>Remember, the model with no training data has OOV probability 1 and therefore perplexity 0. Comparing perplexities with different vocabulary sizes is meaningless.</p>
+<p>You should really use including OOV, which is counts every word including unknown words. Excluding OOV skips unknown words for purposes of computing probability and normalizing. It's there because SRI does that.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+  </div>
+  <div class="tag-cloud">
+    <p>
+    </p>
+  </div>
+
+
+
+
+
+</article>
+
+    <footer>
+<p>
+  &copy; 2020 FY - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+  <span class="footer-separator">|</span>
+  Switch to the <a href="javascript:void(0)" onclick="theme.switch(`dark`)">dark</a> | <a href="javascript:void(0)" onclick="theme.switch(`light`)">light</a> | <a href="javascript:void(0)" onclick="theme.switch(`browser`)">browser</a> theme
+  <script id="dark-theme-script"
+          src="https://fyvo.github.io/theme/dark-theme/dark-theme.min.js"
+          data-enable-auto-detect-theme="True"
+          data-default-theme="dark"
+          type="text/javascript">
+  </script>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Multilingual NLP / Multilinguisme en Traitement des langues ",
+  "url" : "https://fyvo.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+
+</body>
+</html>

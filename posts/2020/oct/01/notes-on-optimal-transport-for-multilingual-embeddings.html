@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/stylesheet/style.min.css">
+
+    <link id="dark-theme-style" rel="stylesheet" type="text/css"
+          media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+    href="https://fyvo.github.io/theme/stylesheet/dark-theme.min.css">
+
+    <link id="pygments-dark-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: light)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+
+
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/solid.css">
+
+
+    <link href="https://fyvo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Multilingual NLP / Multilinguisme en Traitement des langues Atom">
+
+
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#222222">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#222222">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#222222">
+
+<meta name="author" content="François Yvon" />
+<meta name="description" content="This post is a short summary of what needs to be known, and slightly more, to fully get the grasp of a series of not so recent papers (2017-2018) which have tried to exploit the mathematical theory of Optimal Transport to compute multilingual word embeddings." />
+<meta name="keywords" content="">
+
+
+<meta property="og:site_name" content="Multilingual NLP / Multilinguisme en Traitement des langues"/>
+<meta property="og:title" content="Notes on Optimal Transport for Multilingual Embeddings"/>
+<meta property="og:description" content="This post is a short summary of what needs to be known, and slightly more, to fully get the grasp of a series of not so recent papers (2017-2018) which have tried to exploit the mathematical theory of Optimal Transport to compute multilingual word embeddings."/>
+<meta property="og:locale" content="fr_FR"/>
+<meta property="og:url" content="https://fyvo.github.io/posts/2020/oct/01/notes-on-optimal-transport-for-multilingual-embeddings.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2020-10-01 00:00:00+02:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://fyvo.github.io/">
+<meta property="article:section" content="Multilinguality, Embeddings"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>Multilingual NLP / Multilinguisme en Traitement des langues &ndash; Notes on Optimal Transport for Multilingual Embeddings</title>
+
+</head>
+<body >
+  <aside>
+    <div>
+      <a href="https://fyvo.github.io">
+        <img src="/images/profile.png" alt="" title="">
+      </a>
+
+      <h1>
+        <a href="https://fyvo.github.io"></a>
+      </h1>
+
+<p>Un site académique / An academic site</p>
+
+      <nav>
+        <ul class="list">
+
+
+
+            <li>
+              <a target="_self" href="/pages/curriculum" >About me</a>
+            </li>
+            <li>
+              <a target="_self" href="https://cv.archives-ouvertes.fr/francois-yvon" >Publications</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/reviewing-and-editing-activities-en" >Reviewing</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/blog_index.html" >Posts</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/contacts-en,fr" >Contact</a>
+            </li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-LinkedIn" href="https://www.linkedin.com/in/françois-yvon-b5b64a" target="_blank">
+              <i class="fab fa-LinkedIn"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Twitter" href="https://twitter.com/yvofr" target="_blank">
+              <i class="fab fa-Twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Github" href="https://github.com/fyvo" target="_blank">
+              <i class="fab fa-Github"></i>
+            </a>
+          </li>
+      </ul>
+    </div>
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://fyvo.github.io">Home</a>
+
+      <a href="/pages/resources-for-machine-translation-en">Resources [en]</a>
+      <a href="/pages/enseignements">Enseignement [fr]</a>
+      <a href="/pages/doctorants">Doctorants [fr]</a>
+      <a href="/pages/mediation-scientifique">Médiation [fr]</a>
+
+      <a href="https://fyvo.github.io/feeds/all.atom.xml">Atom</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="notes-on-optimal-transport-for-multilingual-embeddings">Notes on Optimal Transport for Multilingual Embeddings</h1>
+    <p>
+      Posted on Jeu 01 oct 2020 in <a href="https://fyvo.github.io/category/multilinguality-embeddings.html">Multilinguality, Embeddings</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <h2>Monge's Problem</h2>
+<p>Monge's problem is a mapping problem: given two sets of points with a mass <span class="math">\(X= \{x_i, i=1 \dots n\}\)</span> with respective mass <span class="math">\(a_i\)</span> and <span class="math">\(Y=\{y_j, j=1 \dots m\}\)</span> with respective mass <span class="math">\(b_j\)</span> the <em>Monge assignment problem</em> seeks a map <span class="math">\(\Gamma\)</span> between <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> such that (a) <span class="math">\(\Gamma\)</span> minimizes some mapping cost (in Monge's initial problem a distance between points), and (b) <span class="math">\(\Gamma\)</span> satisfies <strong>mass conservation properties</strong>: all the mass in <span class="math">\(x_i\)</span> should be in the set <span class="math">\(\Gamma[x_i]\)</span>: <span class="math">\(\forall j, \sum_{i  | \Gamma[x_i] = y_j} a_i = b_j\)</span>. </p>
+<p>This problem can also be formulated in continuous spaces, with punctual masses <span class="math">\(a\)</span> and <span class="math">\(b\)</span> changed into measures <span class="math">\(\mu_X\)</span> and <span class="math">\(\mu_Y\)</span>. <span class="math">\(\Gamma\)</span> is then constrained to minimize the total transportation cost  <span class="math">\(\int_X \mu_X(x) c(x, \Gamma(x)) dx\)</span> under the constraint that for all measurable sets <span class="math">\(B\)</span> <span class="math">\(\int_B \mu_Y(y)dy = \int_{\Gamma^{-1}(B)} \mu_X(x) dx\)</span>. [Any <span class="math">\(\Gamma\)</span> realizing this is a <em>push forward</em> mapping, denoted <span class="math">\(\Gamma_{\#} \mu_X = \mu_Y\)</span>.]</p>
+<p>In discrete spaces a related problem is the classical combinatorial assignment problem, which corresponds to <span class="math">\(m=n\)</span> and all masses equal to one. In this case, the optimal mapping is solved with the <a href="">Hungarian wedding algorithm</a> in <span class="math">\(O(n^3)\)</span>. Such methods have been used to perform heuristic word alignments in parallel sentences, assuming some matching cost (eg.\ pointwise mutual information or any reasonnable cooccurrence measure) between points. For multilingual embeddings, we will have <span class="math">\(X\)</span> as the set of embeddings in one language, and <span class="math">\(Y\)</span> the sets of embeddings in another language, and we will need to map one to the other. A nice property is they no longer will need to have the same size.</p>
+<p>The relaxation by Kantorovitch relaxes the assumption that <span class="math">\(\Gamma\)</span> is a mapping and consider probabilistic couplings instead - which means that the masses in each <span class="math">\(x\)</span> can be split to be distributed to some <span class="math">\(y\)</span>. This yields a probabilistic assignment problem, again subject to marginal constraints.</p>
+<h2>The transport problem</h2>
+<h3>Basics</h3>
+<p>In discrete spaces, we define <em>transportation plans</em> <span class="math">\(\Gamma\)</span> as follows:
+</p>
+<div class="math">$$
+\Gamma: (d \times d) \text{ matrix with coefficients in } \R_+
+U(p,q) = \{\Gamma \in \R_+^{d\times{}d}, \Gamma I_d = p, \Gamma^T I_d=q \}
+$$</div>
+<p>
+<span class="math">\(U(p,q)\)</span>, the set of matrices satisfying the constraints, is a bounded set with <span class="math">\(m+n\)</span> linear equality constraints. This defines a convex polytope. Another way to look at <span class="math">\(U(p,q)\)</span> is that they contain probability distributions with fixed marginals.</p>
+<p>Recall that the Frobenius norm between matrices between matrices <span class="math">\(\Gamma\)</span> and <span class="math">\(M\)</span> is defined as: <span class="math">\(&lt;\Gamma,M&gt; = \operatorname{Tr}(\Gamma^T M) = \sum_{i,j} \Gamma_{ij} M_{ij}\)</span>.</p>
+<p>Let <span class="math">\(M\)</span> be a cost matrix satisfying the following properties <span class="math">\(M_{ij} = 0\)</span> iff <span class="math">\(i=j\)</span>, <span class="math">\(M_{ij} =M_{ji}\)</span> (symmetry), and triangular inequality <span class="math">\(\forall i,j,k M_{i,k} \lt M_{i,j} + M_{j,k}\)</span></p>
+<p>When <span class="math">\(\Gamma\)</span> is in <span class="math">\(U(p,q)\)</span>, <span class="math">\(&lt;\Gamma,M&gt;\)</span> can read as an expectation over <span class="math">\(\Gamma()\)</span> of the transportation cost:
+</p>
+<div class="math">$$&lt;\Gamma,M&gt; = \sum_{i,j} \Gamma_{ij} M_{ij} = E_{X,Y \sim P(X,Y)} [M(X,Y)]$$</div>
+<p>
+This formulation also serves to define the problem in continuous spaces.</p>
+<h3>Optimal Transport Problem</h3>
+<p><strong>(Kantorovitch) Optimal transport  problem (OTP)</strong> between <span class="math">\(p\)</span> and <span class="math">\(q\)</span> (for fixed <span class="math">\(M\)</span>): Find <span class="math">\(\Gamma\)</span> minimizing <span class="math">\(&lt;\Gamma,M&gt;\)</span> subject to marginal constraints <span class="math">\(\Gamma{} \in U(p,q)\)</span>. The solution is denoted <span class="math">\(\operatorname{OTP^_*}(p,q)\)</span>.</p>
+<p>This is a tight relaxation of the Monge problem. When the marginal are uniform distributions over sets of the same size, the solution to the OTP is a one-to-one mapping - no other solution is better (proof in [(PC, p15)]).</p>
+<p>OTP is a linear problem (linear objective with linear constraints) that can be solved with the simplex algorithm or variants. The solution is a vertex of the polytope (cannot be an interior point).</p>
+<h3>Distance induced by the OTP</h3>
+<p>The solution to the OTP <span class="math">\(d_M(p,q)^*\)</span> is a distance between marginal distributions subject to <span class="math">\(M\)</span> being the positive exponent of a distance matrix.</p>
+<p>More precisely, if <span class="math">\(M=D^\alpha\)</span>, where <span class="math">\(D\)</span> is a distance matrix, then <span class="math">\(W_{D,\alpha}(p,q) = \operatorname{OTP^*}(p,q)^{1/\alpha}\)</span> is a distance between <span class="math">\(p\)</span> and <span class="math">\(q\)</span>.</p>
+<p>Symmetry is obvious, <span class="math">\(Diag(p)\)</span> transports <span class="math">\(p\)</span> to itself at cost 0 assuming <span class="math">\(M_{i,i} =0\)</span>, likewise if <span class="math">\(M(u,v) &gt;0\)</span> for <span class="math">\(u \neq v\)</span>, then the transport cost is strictily positive when <span class="math">\(p \neq q\)</span>, transitivity must hold as we can move <span class="math">\(p\)</span> to <span class="math">\(p'\)</span> with <span class="math">\(\Gamma\)</span>, <span class="math">\(p'\)</span> to <span class="math">\(p''\)</span> with <span class="math">\(\Gamma'\)</span>, so the cheapest way to transport <span class="math">\(p\)</span> to <span class="math">\(p"\)</span> must be cheaper than this. The proof in the discrete case is in <a href="">PC, p20</a>; for the continuous case we need the glue (sic) lemma.</p>
+<p>For <span class="math">\(0&lt;p&lt;1\)</span>, this is no longer true, but need to look at <span class="math">\(W_{D,\alpha}(p,q)^{\alpha}\)</span> to get a distance.</p>
+<p><strong>Duality</strong>
+The dual problem is to find the maximum of <span class="math">\(E_{\mu_X}(\phi) + E_{\mu_Y}(\psi)\)</span> such that <span class="math">\(\phi(x) + \psi(y) \lt M(x,y)\)</span>. This is can be seen by writing the primal problem in matrix form (<span class="math">\(min_x c^t x \text{ st. } Ax = b\)</span>) from which we can identify <span class="math">\(b\)</span> to the concatenation of <span class="math">\(p\)</span> and <span class="math">\(q\)</span>, which yields the dual form <span class="math">\(max_y b^Ty \text{ st. } A^Ty =\lt c\)</span>. This shows that the objective has the form of a sum of two expectations over <span class="math">\(p\)</span> and <span class="math">\(q\)</span>.</p>
+<p>The proof in the discrete case is in [PC, p24] and relies on the theory of Lagrange multipliers (in the discrete case, <span class="math">\(\phi\)</span> and <span class="math">\(\psi\)</span> <strong>are</strong> the Lagrange multipliers).</p>
+<p>There is may be a telling analogy. Look at <span class="math">\(\phi\)</span> of a price over just moving <span class="math">\(X\)</span>, and <span class="math">\(\psi\)</span> of just moving <span class="math">\(Y\)</span>, such that the price of both is no greater than the transportation cost, then the sum of these two is reaches its max at a value that is also attained by an optimal transportation plan. This is discussed at length in [PC, p24-25].</p>
+<h2>Wasserstein distances</h2>
+<p>When <span class="math">\(\mathcal{X}\)</span> is a metric space and <span class="math">\(M(x,y) = D^p(x,y)\)</span> for some <span class="math">\(p \ge 1\)</span>, the induced distance (or rather its <span class="math">\(p\)</span>^th) root is the <strong>p-Wasserstein distance</strong>. This is an instance of the more general Earth Mover Distances, which are defined over arbitrary distances.</p>
+<p>When <span class="math">\(p=1\)</span> the [Kantorovitch-Rubinstein duality theorem] states that:
+</p>
+<div class="math">$$
+W(p,q) = \sup_{\phi\in F_L} E_{X \sim p} \phi(X) - E_{Y\sim q} \phi(Y)
+$$</div>
+<p>where <span class="math">\(F_L\)</span> is the class of all 1-Lipschitz functions on <span class="math">\(\mathcal{X}\)</span>.[#klipschitz] In other words, distance between distributions are defined based on the maximal difference of expectations for all variation-bounded functions.</p>
+<p>A <a href="https://vincentherrmann.github.io/blog/wasserstein/">detailed proof</a> shows that these results derives from an analysis of the dual form, where the constraints immediately yields that the optimal of the dual is such that <span class="math">\(\forall i \phi(x_i) +\psi(x_i) \lt 0\)</span>. In fact, in can even be shown that given the positivity of <span class="math">\(p\)</span> and <span class="math">\(q\)</span> the optimum is such that <span class="math">\(\phi(x_i) +\psi(x_i) = 0\)</span>, when we add the boundedness constraints.</p>
+<p>These definitions generalize to the continuous case, where Wasserstein distances are very important because they define <strong><em>weak</em></strong> distances between measures, which can be used to redefine fundamental notions such as <strong>convergence</strong>.</p>
+<h2>Entropic relaxation and fast OTP computation</h2>
+<p><strong>Sinkhorn distances:</strong> <span class="math">\(\forall p,q, \forall \Gamma \in U(p,q), H(\Gamma) \lt H(p) + H(q) = H(pq^T)\)</span>, so the inegality is tight.</p>
+<p><span class="math">\(U_\alpha = \{P \in U(p,q) \text{ such that } \operatorname{KL}(P||rc^T) \lt \alpha \}\)</span>, (<span class="math">\(\alpha &gt; 0\)</span> otherwise this is meaningless),
+is the set of transport plans whose entropy is within <span class="math">\(\alpha\)</span> of the independent plan <span class="math">\((p^Tq)\)</span>.</p>
+<p>Sinkhorn distance: <span class="math">\(d_{M,\alpha} = min_{ \Gamma \in U_\alpha} &lt;\Gamma,M&gt;\)</span></p>
+<p>So this is the original transportation with additional entropic constraints on <span class="math">\(\Gamma\)</span> to keep <span class="math">\(\Gamma\)</span> smooth (<span class="math">\(p^Tq\)</span>) has no nonzero value.</p>
+<p>New problem (for <span class="math">\(\lambda &gt;0\)</span>), which yields the dual Sinkhorn divergence:
+</p>
+<div class="math">$$
+d_M^{\lambda}(p,q) = \min_{\Gamma \in U(p,q)} &lt;\Gamma,M&gt; - \frac{1}{\lambda} h(\Gamma)
+$$</div>
+<p>
+For each value of <span class="math">\(\alpha\)</span>, <span class="math">\(\exists \lambda d_M^\lambda(p,q) = d_M^\alpha(p,q)\)</span> (duality theory). It can be found by varying <span class="math">\(\lambda\)</span> monotonously -- the entropy of <span class="math">\(h(\Gamma)\)</span> is between <span class="math">\(0\)</span> and <span class="math">\(\log(d)\)</span>, so when <span class="math">\(\lambda\)</span> goes to <span class="math">\(0\)</span>, the second term goes to infinity, and <span class="math">\(h(\Gamma)\)</span> increases. [I have a problem here]</p>
+<p>Computing dual Sinkhorn divergences results from an old theorem that says that for each positive matrix <span class="math">\(A\)</span>, there is a unique pair of diagonal positive matrices such that <span class="math">\(Diag(u) A Diag(v)\)</span> is doubly stochastic and can be computed by the Sinkhorn fixed point algorithm:
+assuming we start with uniform <span class="math">\(u\)</span> and <span class="math">\(v\)</span>:
+</p>
+<div class="math">$$(u,v) &lt;- p ./ Kv, q./K'u,$$</div>
+<p>
+with <span class="math">\(K = exp(-\lambda M)\)</span>.</p>
+<p>Assuming proper stopping criteria. Solve this for large values of <span class="math">\(\lambda\)</span> gets you closer to the actual solution of the initial problem (because the entropy term becomes less and less important).</p>
+<p><a href="https://michielstock.github.io/OptimalTransport/">Example implementation</a>
+    :::python
+    def compute_optimal_transport(M, r, c, lam, epsilon=1e-8):
+    """
+    Computes the optimal transport matrix and Slinkhorn distance using the
+    Sinkhorn-Knopp algorithm</p>
+<div class="highlight"><pre><span></span><span class="n">Inputs</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">M</span> <span class="p">:</span> <span class="n">cost</span> <span class="n">matrix</span> <span class="p">(</span><span class="n">n</span> <span class="n">x</span> <span class="n">m</span><span class="p">)</span>
+    <span class="o">-</span> <span class="n">r</span> <span class="p">:</span> <span class="n">vector</span> <span class="k">of</span> <span class="n">marginals</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">)</span>
+    <span class="o">-</span> <span class="k">c</span> <span class="p">:</span> <span class="n">vector</span> <span class="k">of</span> <span class="n">marginals</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="p">)</span>
+    <span class="o">-</span> <span class="n">lam</span> <span class="p">:</span> <span class="n">strength</span> <span class="k">of</span> <span class="n">the</span> <span class="n">entropic</span> <span class="n">regularization</span>
+    <span class="o">-</span> <span class="n">epsilon</span> <span class="p">:</span> <span class="n">convergence</span> <span class="k">parameter</span>
+
+<span class="n">Outputs</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">P</span> <span class="p">:</span> <span class="n">optimal</span> <span class="n">transport</span> <span class="n">matrix</span> <span class="p">(</span><span class="n">n</span> <span class="n">x</span> <span class="n">m</span><span class="p">)</span>
+    <span class="o">-</span> <span class="n">dist</span> <span class="p">:</span> <span class="n">Sinkhorn</span> <span class="n">distance</span>
+<span class="ss">&quot;&quot;</span><span class="err">&quot;</span>
+<span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">M</span><span class="p">.</span><span class="n">shape</span>
+<span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">M</span><span class="p">)</span>
+<span class="n">P</span> <span class="o">/=</span> <span class="n">P</span><span class="p">.</span><span class="k">sum</span><span class="p">()</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="o">#</span> <span class="n">normalize</span> <span class="n">this</span> <span class="n">matrix</span>
+<span class="n">while</span> <span class="n">np</span><span class="p">.</span><span class="k">max</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="k">abs</span><span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">P</span><span class="p">.</span><span class="k">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">:</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">P</span><span class="p">.</span><span class="k">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">#</span> <span class="n">reshape</span> <span class="n">will</span> <span class="n">handle</span> <span class="n">the</span> <span class="n">transposition</span> <span class="n">operations</span>
+    <span class="n">P</span> <span class="o">*=</span> <span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="n">u</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">P</span> <span class="o">*=</span> <span class="p">(</span><span class="k">c</span> <span class="o">/</span> <span class="n">P</span><span class="p">.</span><span class="k">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="k">sum</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="n">M</span><span class="p">)</span>
+</pre></div>
+
+
+<p>A computational analysis is in http://papers.nips.cc/paper/6792-near-linear-time-approximation-algorithms-for-optimal-transport-via-sinkhorn-iteration</p>
+<h2>Wasserstein distance as a cost function - Wasserstein GANs</h2>
+<h3>The model</h3>
+<p>Let <span class="math">\(p\)</span> be the empirical distribution and <span class="math">\(q\)</span> the model distribution. For fixed <span class="math">\(M\)</span> (eg. the usual metric in a metric space), a natural objective would be to make <span class="math">\(q\)</span> as close as <span class="math">\(p\)</span> as possible, and to minimize the Wasserstein distance. This is what WGAN do for a class of generative models where we have observed data points distributed under <span class="math">\(p\)</span>, and generated data points that result from a 2-step procedure where we first sample <span class="math">\(z \sim q\)</span> (eg. a white noise), then generate deterministically <span class="math">\(x\)</span> through <span class="math">\(x=g_\theta(z)\)</span> (eg. a neural network for instance). We would like to find the optimal <span class="math">\(\theta\)</span> minimizing the distance between distributions <span class="math">\(p\)</span> and <span class="math">\(f_\theta(q)\)</span>.</p>
+<p>or equivalently:
+</p>
+<div class="math">$$
+W(p,q) = \sup_{f \in F_L} E_{X \sim p} f(X) - E_{x\sim q} f(Y)
+$$</div>
+<p>
+where <span class="math">\(F_L\)</span> is the class of all 1-Lipschitz functions from <span class="math">\((\mathcal{X},d)\)</span> into <span class="math">\(\R\)</span>.</p>
+<p>As <span class="math">\(x=g_\theta(z)\)</span>, this program boils down to minimizing
+</p>
+<div class="math">$$
+W(p, p_\theta) = \sup_{\phi \in F_L} E_{X \sim p} \phi(X) - E_{Z\sim q} \phi(f_\theta(Z))
+$$</div>
+<p>
+where <span class="math">\(F_L\)</span> is the class of all 1-Lipschitz functions on <span class="math">\((\mathcal{X},d)\)</span>.</p>
+<p>Assume we have a set of 1-Lipschitz (or <span class="math">\(K\)</span>-Lipschitz) functions parameterized by <span class="math">\(\lambda\)</span>, we could approach <span class="math">\(W(p,p_\theta\)</span>) as
+</p>
+<div class="math">$$
+    max_{\lambda} E_{X \sim p} \phi_\lambda(X) - E_{Z\sim q} \phi_\lambda (g_\theta(Z))
+$$</div>
+<p>Bar some technical conditions, Wasserstein GANs will:
+1. Find a appropriate <span class="math">\(\lambda\)</span> to compute the Wasserstein distance
+2. Given this <span class="math">\(\lambda\)</span>, minimize the distance in <span class="math">\(\theta\)</span>. The important mathematical point here is that we can differentiate the Wasserstein distance wrt. <span class="math">\(\theta\)</span> as <span class="math">\(-E_{z \sim q} \nabla_\theta \phi_\lambda(g_{\theta}(z))\)</span>
+3. make sure <span class="math">\(f_\lambda\)</span> remains Lipschitz, this is achieved in the original paper by clipping the weights in a fixed <span class="math">\(d\)</span>-dimensional box after each update.</p>
+<ol>
+<li>will roughly correspond to optimizing the GAN's critic / discriminator - find a <span class="math">\(\phi_\lambda\)</span> whose expectation under <span class="math">\(p\)</span> is different from the expectation under <span class="math">\(p_{\theta}\)</span>; 2. then updates <span class="math">\(\theta\)</span> to reduce this distance.</li>
+</ol>
+<p>Technical details are in the original publication by <a href="https://arxiv.org/abs/1704.00028">(Arjosky et al, 2017)</a>, easier reads are <a href="https://mindcodec.ai/2018/09/23/an-intuitive-guide-to-optimal-transport-part-ii-the-wasserstein-gan-made-easy/">this post</a> or <a href="https://www.alexirpan.com/2017/02/22/wasserstein-gan.html">this one</a>. The weight clipping part seems to be an issue, and alternatives exist for instance https://arxiv.org/abs/1704.00028.</p>
+<h3>Implementing WGANs</h3>
+<p>The basic implementation would do the following:
+   initialize <span class="math">\(\theta\)</span>, <span class="math">\(\lambda\)</span>
+   for i in range(I):
+       while(! not convergence):
+           sample <span class="math">\(x_1 \dots x_n\)</span> (data points), sample <span class="math">\(z_1 \dots z_m\)</span> (generated samples)
+       compute <span class="math">\(F = \frac{1}{n} \phi_{\lambda} (x_i) - \frac{1}{m} \phi_{\lambda} (g_\theta(z_i))\)</span>
+           compute <span class="math">\(\nabla_\lambda F\)</span>
+           update <span class="math">\(\lambda\)</span>
+           <span class="math">\(\operatorname{clip}(\lambda)\)</span>
+       compute <span class="math">\(\nabla_\theta\)</span>(g) = - \frac{1}{m} \sum \nabla_\theta (\phi_\lambda(g_{\theta}(z_i)))<span class="math">\(
+       update $\theta\)</span>
+   done</p>
+<p>Rq. In the sampling step, does it matter to sample the same number of points ? In the second estimation, can we reuse the same data points ? Does it matter ? We can have more of one than of the other, that would yield better estimates of the expectation.</p>
+<h3>Application to multilingual embeddings</h3>
+<p>The Wassertstein-GAN model is used to trained multilingual embeddings in a supervised fashion in <a href="https://zmlarry.github.io/publications/emnlp2017.pdf">(Meng Zhang et al, Proc EMNLP 2017)</a>. In this application, the setting is a bit different from the typical WGAN as the starting point is a pair of sets of monolingual embeddings <span class="math">\(X_S\)</span> and <span class="math">\(X_T\)</span> in respectively the source and target languages. We still assume that we would like to find a transform from one into the other such that the Wasserstein distance between <span class="math">\(X_S\)</span> and <span class="math">\(g_\theta(X_T)\)</span>. The authors seem to closely follow the approach of <a href="">(Arjosky et al, 2017)</a>, and do not need to pair source and target words in the first step (computation of the Wasserstein distance). The second part only uses one language and also no pairing.</p>
+<h3>Follow-up Questions:</h3>
+<p>1) the basic procedure is asymmetric, and does not require supervision. Which is very nice, but probably not sufficiently put forward.
+Alternative approaches assume supervision - can we use it ? This would mean more constraints on the transportation map.</p>
+<p>The authors mention heuristic sparsification of the transportation matrix. I am assuming that changing the regularizer from entropic to L^2 would do exactly this. We would have a extra learnable parameter to control the sparsity level.</p>
+<p>The problem of finding the cost matrix given <span class="math">\(c\)</span> is also interesting. This is an inverse problem studied for instance in [https://jmlr.csail.mit.edu/papers/volume20/18-700/18-700.pdf], and it may be somehow more interesting than the initial problem, provided we express the distance function as </p>
+<p>2) the system does not really use masses, whereas we could fairly easily weight words with their frequencies or log-frequencies, and use this in sampling. How should we do this ? use unigram distributions when sampling ? That seems to be the minimum. Would the effect move frequent word -&gt; frequent word ?</p>
+<p>3) Could we do it with a word model ? That is without computing embeddings for a fixed set ? The answer is yes and if we have a way to generate character strings, we could do it much more easily. Think about it.</p>
+<p>4) How good would this be for word alignments ?</p>
+<p>5) How to recover the transportation Map ? Given <span class="math">\(\theta\)</span>, we have two sets of points, and a function <span class="math">\(G\)</span> that maps one set to the other. One would then need to solve the primal problem (or a relaxed version) to get the transportation map. </p>
+<p>6) applications - MT Evaluation with METEOR like stuff</p>
+<p>Additional readings on the same issue (precursor):
+- Meng Zhang, Yang Liu, Huanbo Luan, Yiqun Liu, and Maosong Sun. Inducing Bilingual Lexica From Non-Parallel Data With Earth Mover's Distance Regularization. In Proceedings of COLING, 2016. [paper] --&gt; https://zmlarry.github.io/publications/coling2016.pdf
+- Meng Zhang, Yang Liu, Huanbo Luan, Maosong Sun, Tatsuya Izuha, and Jie Hao. Building Earth Mover's Distance on Bilingual Word Embeddings for Machine Translation. In Proceedings of AAAI, 2016. [paper] --&gt; https://zmlarry.github.io/publications/aaai2016.pdf
+- Meng Zhang, Yang Liu, Huanbo Luan, and Maosong Sun. Earth Mover's Distance Minimization for Unsupervised Bilingual Lexicon Induction. In Proceedings of EMNLP, 2017. [paper][code] --&gt; https://zmlarry.github.io/publications/emnlp2017.pdf
+And follower:
+- Joulin Grave Berthet http://proceedings.mlr.press/v89/grave19a.html</p>
+<p>Side note on the Procrutes part
+La partie Procrustes est plus claire, même si il manque encore des détails à bien comprendre. Ce que le Procrustes normal supervise est une matrice binaire remplacée dans l'équation par une matrice de transport. Du point de vue mathématique, on cherche G une rotatation telle que
+</p>
+<div class="math">\begin{align}
+  G &amp; = \argmin_G \sum_{u\in V_S, v \in V_T} T_{u,v} \| u G - v \l^2 \\
+    &amp;  = \argmin_G \sum_{u\in V_S, v \in V_T} T_{u,v}    u GG^Tu  + v^Tv - 2 uGv^T \\
+    &amp; = \argmax_G \sum_{u\in V_S, v \in V_T} T_{u,v}    uGv^T \\
+    &amp; = \argmax_G \operatorname{Trace}( T UGV^T) \\
+      &amp; = \argmax_G \operatorname{Trace}(V^T T UG) \\
+\end{align}</div>
+<p>
+On utilise la SVD de <span class="math">\(V^T T U = A \Sigma B^T\)</span> et les propriétés de la trace pour conclure que le minimum est aussi celui de <span class="math">\(\operatorname{Trace}(A \Sigma B^TG) =\operatorname{Trace}(\Sigma B^TGA)\)</span> qui est atteint quand <span class="math">\(B^TGA\)</span> est l'identité, soit <span class="math">\(G=BA^T\)</span>. On retrouve le problème de Procrustes habituel quand <span class="math">\(T_{u,v}\)</span> est la matrice diagonale qui supervise les appariemments mot à mot.</p>
+<hr>
+<p>More thoughts on (3): if we have a word generating model eg
+w \sample unigram (char)
+g(w) = fastext(w)
+then I can try to do the same. This has less impact</p>
+<h2><a href="https://openreview.net/pdf?id=HkL7n1-0b">Wasserstein auto-encoders</a></h2>
+<p>The crux of the argument is to study the case where the model </p>
+<h2>Sources and references</h2>
+<h4>G.Peyré + M.Cuturi handbook</h4>
+<p>Henceforth <a href="https://arxiv.org/abs/1803.00567">PC</a>, very complete, contains the basic proofs and necessary material to understand most works.</p>
+<h4>A nice blog from Raboud scholars (with code) that helps to explain Wasserstein GANs:</h4>
+<ul>
+<li><a href="https://mindcodec.ai/2018/09/19/an-intuitive-guide-to-optimal-transport-part-i-formulating-the-problem/">basics</a></li>
+<li><a href="https://mindcodec.ai/2018/09/23/an-intuitive-guide-to-optimal-transport-part-ii-the-wasserstein-gan-made-easy/">WGANs</a></li>
+<li><a href="https://mindcodec.ai/2018/10/01/an-intuitive-guide-to-optimal-transport-part-iii-entropic-regularization-and-the-sinkhorn-iterations/">Regularizing OTP: Sinkhorn</a></li>
+</ul>
+<h3>Mathematical fundations</h3>
+<p>http://www.math.cmu.edu/~mthorpe/OTNotes</p>
+<h2>Footnotes</h2>
+<p>[#lipschitz] Note that when <span class="math">\(\phi\)</span> is K-Lifschitz, <span class="math">\(\frac{phi}{K}\)</span> is 1-Lifschitz, so we can actually generalize somehow the next results.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+  </div>
+  <div class="tag-cloud">
+    <p>
+    </p>
+  </div>
+
+
+
+
+
+</article>
+
+    <footer>
+<p>
+  &copy; 2020 FY - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+  <span class="footer-separator">|</span>
+  Switch to the <a href="javascript:void(0)" onclick="theme.switch(`dark`)">dark</a> | <a href="javascript:void(0)" onclick="theme.switch(`light`)">light</a> | <a href="javascript:void(0)" onclick="theme.switch(`browser`)">browser</a> theme
+  <script id="dark-theme-script"
+          src="https://fyvo.github.io/theme/dark-theme/dark-theme.min.js"
+          data-enable-auto-detect-theme="True"
+          data-default-theme="dark"
+          type="text/javascript">
+  </script>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Multilingual NLP / Multilinguisme en Traitement des langues ",
+  "url" : "https://fyvo.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+
+</body>
+</html>
