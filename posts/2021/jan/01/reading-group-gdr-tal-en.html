@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/stylesheet/style.min.css">
+
+    <link id="dark-theme-style" rel="stylesheet" type="text/css"
+          media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+    href="https://fyvo.github.io/theme/stylesheet/dark-theme.min.css">
+
+    <link id="pygments-dark-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: dark), (prefers-color-scheme: no-preference)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: light)"
+          href="https://fyvo.github.io/theme/pygments/default.min.css">
+
+
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://fyvo.github.io/theme/font-awesome/css/solid.css">
+
+
+    <link href="https://fyvo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Multilingual NLP / Multilinguisme en Traitement des langues Atom">
+
+
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#222222">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#222222">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#222222">
+
+<meta name="author" content="François Yvon" />
+<meta name="description" content="October 30, 2020 A multilingual view of unsupervised MT Garcia, Foret, Sellam and Parikh Devise a model for multilingual unsupevised MT. The main idea is as follows: consider \(L\) languages, and model the joint distribution \(P(x,y,z...)\) (let us assume \(L=3\) for the sake of the argument …" />
+<meta name="keywords" content="">
+
+
+<meta property="og:site_name" content="Multilingual NLP / Multilinguisme en Traitement des langues"/>
+<meta property="og:title" content="Reading Group - GDR TAL"/>
+<meta property="og:description" content="October 30, 2020 A multilingual view of unsupervised MT Garcia, Foret, Sellam and Parikh Devise a model for multilingual unsupevised MT. The main idea is as follows: consider \(L\) languages, and model the joint distribution \(P(x,y,z...)\) (let us assume \(L=3\) for the sake of the argument …"/>
+<meta property="og:locale" content="fr_FR"/>
+<meta property="og:url" content="https://fyvo.github.io/posts/2021/jan/01/reading-group-gdr-tal-en.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2021-01-01 00:00:00+01:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://fyvo.github.io/">
+<meta property="article:section" content="misc"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>Multilingual NLP / Multilinguisme en Traitement des langues &ndash; Reading Group - GDR TAL</title>
+
+</head>
+<body >
+  <aside>
+    <div>
+      <a href="https://fyvo.github.io">
+        <img src="/images/profile.png" alt="" title="">
+      </a>
+
+      <h1>
+        <a href="https://fyvo.github.io"></a>
+      </h1>
+
+<p>Un site académique / An academic site</p>
+
+      <nav>
+        <ul class="list">
+
+
+
+            <li>
+              <a target="_self" href="/pages/curriculum" >About me</a>
+            </li>
+            <li>
+              <a target="_self" href="https://cv.archives-ouvertes.fr/francois-yvon" >Publications</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/reviewing-en" >Reviewing</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/blog_index.html" >Posts</a>
+            </li>
+            <li>
+              <a target="_self" href="/pages/access" >Contact</a>
+            </li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-LinkedIn" href="https://www.linkedin.com/in/françois-yvon-b5b64a" target="_blank">
+              <i class="fab fa-LinkedIn"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Twitter" href="https://twitter.com/yvofr" target="_blank">
+              <i class="fab fa-Twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-BlueSky" href="https://bsky.app/profile/yvofr.bsky.social" target="_blank">
+              <i class="fab fa-BlueSky"></i>
+            </a>
+          </li>
+          <li>
+            <a  class="sc-Github" href="https://github.com/fyvo" target="_blank">
+              <i class="fab fa-Github"></i>
+            </a>
+          </li>
+      </ul>
+    </div>
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://fyvo.github.io">Home</a>
+
+      <a href="/pages/resources-en">Resources [en]</a>
+      <a href="/pages/teaching">Enseignement [fr]</a>
+      <a href="/pages/talks">Exposés [fr]</a>
+      <a href="/pages/phd-students">Doctorants [fr]</a>
+      <a href="/pages/media">Médiation [fr]</a>
+
+      <a href="https://fyvo.github.io/feeds/all.atom.xml">Atom</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="reading-group-gdr-tal">Reading Group - GDR TAL</h1>
+    <p>
+      Posted on Ven, 01 jan 2021 in <a href="https://fyvo.github.io/category/misc.html">misc</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <h2>October 30, 2020</h2>
+<h3><a href="https://arxiv.org/pdf/2002.02955.pdf">A multilingual view of unsupervised MT</a></h3>
+<p>Garcia, Foret, Sellam and Parikh</p>
+<p>Devise a model for multilingual unsupevised MT. The main idea is as follows: consider <span class="math">\(L\)</span> languages, and model the joint distribution <span class="math">\(P(x,y,z...)\)</span> (let us assume <span class="math">\(L=3\)</span> for the sake of the argument) based on a multiplicity of monolingual or bilingual corpora. The translation parameters require conditional models so the main objective is a sum
+</p>
+<div class="math">$$
+    \log E_{y,z} P_{\theta}(x|y,z) + \log E_{x,z}  P_{\theta}(y|x,z)  + \log E_{x,y} P_{\theta}(z|x,y) 
+$$</div>
+<p>
+where the unobserved source data (source) are handled as latent variables in the model. A major assumption is that we do not need <span class="math">\(y,z\)</span> to generate the translation <span class="math">\(x\)</span>, hence
+$ P_{\theta}(x|y,z)= P_{\theta}(x|y)= P_{\theta}(x|z) = \sqrt{P_{\theta}(x|y)P_{\theta}(x|z)}.</p>
+<p>Each term in the summation is lower bounded using the Jensen's inequality, yielding for instance for the first term:
+</p>
+<div class="math">$$
+\log E_{y,z} P_{\theta}(x|y,z) \ge \frac{1}{2} E_{y \sim P_\theta(y|x)} \logP(x|y) + \frac{1}{2} E_{y \sim P_\theta(y|z)} \logP(x|z) + E_{(y,z) \sim Y,Z} \log P(y,z)
+$$</div>
+<p>
+Il est intéressant de voir les deux premiers termes comme des termes de reconstruction après back-translation.
+It is interesting to see the first two terms as reconstruction after a back-translation.</p>
+<p>As all these terms are expectations, one can try to use EM to maximise this bound; during the E step one must compute the posterior of <span class="math">\(y|x\)</span>, which is approximated using the sole <span class="math">\(argmax\)</span> (itself an approximation) <span class="math">\(\widehat{y}\)</span>; during the <span class="math">\(M-step\)</span> one must optimize in <span class="math">\(\theta\)</span>, but instead the authors propose to perform one step of gradient update. </p>
+<h3><a href="https://arxiv.org/pdf/2006.04768.pdf">The Linformer</a></h3>
+<p>The <strong>Linformer</strong> approach of <a href="https://arxiv.org/pdf/2006.04768.pdf">Wang et al (2020)</a> rests on the observation that the computation performed by heads can be approximated by the product of two low ranks matrices.</p>
+<p>Furthermore, these low rank matrices can be obtained by introducing two random matrices for each head, one to project the <span class="math">\(V^{kl} I^{l-1}\)</span> term (<span class="math">\(T \times{} d_k)\)</span> into a <span class="math">\((S \times{} d_k)\)</span> matrix (through the multiplication by a <span class="math">\(S \times T\)</span> matrix), the other to project <span class="math">\(K^{kl} I^{l-1}\)</span> also into a <span class="math">\((S \times d_k )\)</span> matrix. As a result, the term in the <span class="math">\(\operatorname{softmax}\)</span> outputs a <span class="math">\(T\times S\)</span> matrix (instead of <span class="math">\(T \times t\)</span>). By choosing <span class="math">\(T \gg S\)</span>, we get the announced complexity reduction, at almost zero cost in terms of performance. As in other papers, the authors show that parameter sharing (here sharing the projection matrices across layers) can also help speed up the computation without harming performance (too much).</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+  </div>
+  <div class="tag-cloud">
+    <p>
+    </p>
+  </div>
+
+
+
+
+
+</article>
+
+    <footer>
+<p>
+  &copy; 2020 FY - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+  <span class="footer-separator">|</span>
+  Switch to the <a href="javascript:void(0)" onclick="theme.switch(`dark`)">dark</a> | <a href="javascript:void(0)" onclick="theme.switch(`light`)">light</a> | <a href="javascript:void(0)" onclick="theme.switch(`browser`)">browser</a> theme
+  <script id="dark-theme-script"
+          src="https://fyvo.github.io/theme/dark-theme/dark-theme.min.js"
+          data-enable-auto-detect-theme="True"
+          data-default-theme="dark"
+          type="text/javascript">
+  </script>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Multilingual NLP / Multilinguisme en Traitement des langues ",
+  "url" : "https://fyvo.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+
+</body>
+</html>

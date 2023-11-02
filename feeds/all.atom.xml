@@ -1,5 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Multilingual NLP / Multilinguisme en Traitement des langues</title><link href="https://fyvo.github.io/" rel="alternate"></link><link href="https://fyvo.github.io/feeds/all.atom.xml" rel="self"></link><id>https://fyvo.github.io/</id><updated>2020-10-09T00:00:00+02:00</updated><subtitle>Un site académique / An academic site</subtitle><entry><title>Very Very Large Transformers</title><link href="https://fyvo.github.io/posts/2020/oct/09/very-very-large-transformers.html" rel="alternate"></link><published>2020-10-09T00:00:00+02:00</published><updated>2020-10-09T00:00:00+02:00</updated><author><name>François Yvon</name></author><id>tag:fyvo.github.io,2020-10-09:/posts/2020/oct/09/very-very-large-transformers.html</id><summary type="html">&lt;h2&gt;Transformers Models: Basics&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Multilingual NLP / Multilinguisme en Traitement des langues</title><link href="https://fyvo.github.io/" rel="alternate"></link><link href="https://fyvo.github.io/feeds/all.atom.xml" rel="self"></link><id>https://fyvo.github.io/</id><updated>2021-01-01T00:00:00+01:00</updated><subtitle>Un site académique / An academic site</subtitle><entry><title>Reading Group - GDR TAL</title><link href="https://fyvo.github.io/posts/2021/jan/01/reading-group-gdr-tal-en.html" rel="alternate"></link><published>2021-01-01T00:00:00+01:00</published><updated>2021-01-01T00:00:00+01:00</updated><author><name>François Yvon</name></author><id>tag:fyvo.github.io,2021-01-01:/posts/2021/jan/01/reading-group-gdr-tal-en.html</id><summary type="html">&lt;h2&gt;October 30, 2020&lt;/h2&gt;
+&lt;h3&gt;&lt;a href="https://arxiv.org/pdf/2002.02955.pdf"&gt;A multilingual view of unsupervised MT&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Garcia, Foret, Sellam and Parikh&lt;/p&gt;
+&lt;p&gt;Devise a model for multilingual unsupevised MT. The main idea is as follows: consider &lt;span class="math"&gt;\(L\)&lt;/span&gt; languages, and model the joint distribution &lt;span class="math"&gt;\(P(x,y,z...)\)&lt;/span&gt; (let us assume &lt;span class="math"&gt;\(L=3\)&lt;/span&gt; for the sake of the argument …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;October 30, 2020&lt;/h2&gt;
+&lt;h3&gt;&lt;a href="https://arxiv.org/pdf/2002.02955.pdf"&gt;A multilingual view of unsupervised MT&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Garcia, Foret, Sellam and Parikh&lt;/p&gt;
+&lt;p&gt;Devise a model for multilingual unsupevised MT. The main idea is as follows: consider &lt;span class="math"&gt;\(L\)&lt;/span&gt; languages, and model the joint distribution &lt;span class="math"&gt;\(P(x,y,z...)\)&lt;/span&gt; (let us assume &lt;span class="math"&gt;\(L=3\)&lt;/span&gt; for the sake of the argument) based on a multiplicity of monolingual or bilingual corpora. The translation parameters require conditional models so the main objective is a sum
+&lt;/p&gt;
+&lt;div class="math"&gt;$$
+    \log E_{y,z} P_{\theta}(x|y,z) + \log E_{x,z}  P_{\theta}(y|x,z)  + \log E_{x,y} P_{\theta}(z|x,y) 
+$$&lt;/div&gt;
+&lt;p&gt;
+where the unobserved source data (source) are handled as latent variables in the model. A major assumption is that we do not need &lt;span class="math"&gt;\(y,z\)&lt;/span&gt; to generate the translation &lt;span class="math"&gt;\(x\)&lt;/span&gt;, hence
+$ P_{\theta}(x|y,z)= P_{\theta}(x|y)= P_{\theta}(x|z) = \sqrt{P_{\theta}(x|y)P_{\theta}(x|z)}.&lt;/p&gt;
+&lt;p&gt;Each term in the summation is lower bounded using the Jensen's inequality, yielding for instance for the first term:
+&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\log E_{y,z} P_{\theta}(x|y,z) \ge \frac{1}{2} E_{y \sim P_\theta(y|x)} \logP(x|y) + \frac{1}{2} E_{y \sim P_\theta(y|z)} \logP(x|z) + E_{(y,z) \sim Y,Z} \log P(y,z)
+$$&lt;/div&gt;
+&lt;p&gt;
+Il est intéressant de voir les deux premiers termes comme des termes de reconstruction après back-translation.
+It is interesting to see the first two terms as reconstruction after a back-translation.&lt;/p&gt;
+&lt;p&gt;As all these terms are expectations, one can try to use EM to maximise this bound; during the E step one must compute the posterior of &lt;span class="math"&gt;\(y|x\)&lt;/span&gt;, which is approximated using the sole &lt;span class="math"&gt;\(argmax\)&lt;/span&gt; (itself an approximation) &lt;span class="math"&gt;\(\widehat{y}\)&lt;/span&gt;; during the &lt;span class="math"&gt;\(M-step\)&lt;/span&gt; one must optimize in &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, but instead the authors propose to perform one step of gradient update. &lt;/p&gt;
+&lt;h3&gt;&lt;a href="https://arxiv.org/pdf/2006.04768.pdf"&gt;The Linformer&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;The &lt;strong&gt;Linformer&lt;/strong&gt; approach of &lt;a href="https://arxiv.org/pdf/2006.04768.pdf"&gt;Wang et al (2020)&lt;/a&gt; rests on the observation that the computation performed by heads can be approximated by the product of two low ranks matrices.&lt;/p&gt;
+&lt;p&gt;Furthermore, these low rank matrices can be obtained by introducing two random matrices for each head, one to project the &lt;span class="math"&gt;\(V^{kl} I^{l-1}\)&lt;/span&gt; term (&lt;span class="math"&gt;\(T \times{} d_k)\)&lt;/span&gt; into a &lt;span class="math"&gt;\((S \times{} d_k)\)&lt;/span&gt; matrix (through the multiplication by a &lt;span class="math"&gt;\(S \times T\)&lt;/span&gt; matrix), the other to project &lt;span class="math"&gt;\(K^{kl} I^{l-1}\)&lt;/span&gt; also into a &lt;span class="math"&gt;\((S \times d_k )\)&lt;/span&gt; matrix. As a result, the term in the &lt;span class="math"&gt;\(\operatorname{softmax}\)&lt;/span&gt; outputs a &lt;span class="math"&gt;\(T\times S\)&lt;/span&gt; matrix (instead of &lt;span class="math"&gt;\(T \times t\)&lt;/span&gt;). By choosing &lt;span class="math"&gt;\(T \gg S\)&lt;/span&gt;, we get the announced complexity reduction, at almost zero cost in terms of performance. As in other papers, the authors show that parameter sharing (here sharing the projection matrices across layers) can also help speed up the computation without harming performance (too much).&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="misc"></category></entry><entry><title>Very Very Large Transformers</title><link href="https://fyvo.github.io/posts/2020/oct/09/very-very-large-transformers.html" rel="alternate"></link><published>2020-10-09T00:00:00+02:00</published><updated>2020-10-09T00:00:00+02:00</updated><author><name>François Yvon</name></author><id>tag:fyvo.github.io,2020-10-09:/posts/2020/oct/09/very-very-large-transformers.html</id><summary type="html">&lt;h2&gt;Transformers Models: Basics&lt;/h2&gt;
 &lt;p&gt;The transformer architecture of &lt;a href=""&gt;(Vaswani et al, 2017)&lt;/a&gt; has been transformative in the sense that is has quickly replaced more classical RNN architectures as the basic block for building large-scale structured prediction model. A TF learns to transform a structured linguistic object (typically a string) into a …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Transformers Models: Basics&lt;/h2&gt;
 &lt;p&gt;The transformer architecture of &lt;a href=""&gt;(Vaswani et al, 2017)&lt;/a&gt; has been transformative in the sense that is has quickly replaced more classical RNN architectures as the basic block for building large-scale structured prediction model. A TF learns to transform a structured linguistic object (typically a string) into a sequence of numerical representations that can then be used for multiple purposes: machine translation, as in the original paper; language modeling and more generally text generation (summarisation, simplification, etc), and more recently representation learning via the &lt;strong&gt;masked language modelling&lt;/strong&gt; task &lt;a href=""&gt;(Devlin et al, 2019)&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In words, a TF learns to turn context-free lexical embedding into contextual representations: each computation layer recombines in a series of 2 main operations all the input representations, to yield the input for the next layer. Given a sentence represented as a list of vectors &lt;span class="math"&gt;\(I^l= [h_1^{l-1} \dots h_T^{l-1}]\)&lt;/span&gt; at the input of layer &lt;span class="math"&gt;\(l\)&lt;/span&gt;, the most basic operation is the &lt;strong&gt;attention operation&lt;/strong&gt; which will compute a similarity between each input &lt;span class="math"&gt;\(h_i^{l-1}\)&lt;/span&gt; and all the other inputs in &lt;span class="math"&gt;\(I_l\)&lt;/span&gt; in a vector &lt;span class="math"&gt;\(\alpha^l\)&lt;/span&gt; of length &lt;span class="math"&gt;\(T\)&lt;/span&gt;. Once normalized in &lt;span class="math"&gt;\(\alpha_i\)&lt;/span&gt;, these coefficients are used to compute the updated representation &lt;span class="math"&gt;\(h_i^{l} = \sum_j \alpha_i^l h_j^{l-1}\)&lt;/span&gt;, which will be then be added to &lt;span class="math"&gt;\(h_i\)&lt;/span&gt;, normalized, and passed through a feed forward layer before being propagated to the upper layers (details omitted).&lt;/p&gt;
